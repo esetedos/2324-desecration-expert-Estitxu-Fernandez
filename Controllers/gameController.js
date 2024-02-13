@@ -122,10 +122,6 @@ async function game(data){
                         order[asalto % 2].glasses = false;
                         order[oponent].glasses = false;
                         erudito.glasses = true;
-                        const damage17 = throwDice(10, 1);
-                        erudito.hpw -= damage17;
-                        console.log("El erudito recibe un daño de " + damage17 + " puntos")
-
                         break;
 
                     case 19:
