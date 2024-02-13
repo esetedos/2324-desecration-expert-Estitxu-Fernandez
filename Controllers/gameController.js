@@ -8,6 +8,8 @@ async function game(data){
 
     const superHero = getHero(data);
 
+    const erudito = generateErudito();
+
     const order = decideOrder(villainZarate, superHero);
 // console.log(order)
     console.log("------------------------------")
@@ -17,105 +19,133 @@ async function game(data){
 
     let asalto = 0;
 
+    let eruditoTime = Math.random() * (6 - 3) + 3;
+
     //turnos *******************************************
     while(order[0].hp > 0 && order[1].hp > 0){
         console.log("------------------------------");
         console.log("Comienza el asalto " + asalto);
         console.log("------------------------------");
 
+        let oponent = 0;
+        if(asalto % 2 === 0){
+            oponent = 1;
+        }
+
         console.log("El asalto es para " + order[asalto % 2].name)
         
-        //Tiradas ----------
-        const tirada = throwDice(100, 1);
+        if(asalto === eruditoTime){
+            //el turno ha sido robado por el erudito
+            console.log("El Erudito ha aparecido. El turno es suspendido.")
+            eruditoTime = asalto + Math.random() * (6 - 3) + 3; //para el proximo turno del erudito
 
-        if(tirada <= order[asalto % 2].powerstats.combat){
-            //Éxito-------------
-            const segundaTirada = throwDice(20, 1);
-            console.log(order[asalto % 2].name + " obtiene un " + tirada + " y ataca con éxito");
+            erudito.ang = throwDice(20, 1);
+            erudito.hpw = 1 + erudito.hpw;
 
-            if(segundaTirada > 2){
-                //Éxito certero
+            order[asalto % 2].glasses = true;
+            order[asalto % 2].leftArm = false;
+            order[asalto % 2].rightArm = false;
 
-                const normalDamage = Math.ceil((order[asalto % 2].powerstats.power + order[asalto % 2].powerstats.strength)*segundaTirada/100);
-                let oponent = 0;
-                if(asalto % 2 === 0){
-                    oponent = 1;
-                }
-                if(segundaTirada >= 18){
-                    //DAÑO CRITICO
-                    
-                    let damage = 0;
-                    let diceResult = -1;
-                    switch(segundaTirada){
-                        case 18:
-                        case 19:
-                            diceResult = throwDice(3, (segundaTirada-17))
-                            damage = Math.ceil((order[asalto % 2].powerstats.intelligence*order[asalto % 2].powerstats.durability/100)*diceResult);
-                            break;
-                        case 20:
-                            diceResult = throwDice(3, 5)
-                            damage = Math.ceil((order[asalto % 2].powerstats.intelligence*order[asalto % 2].powerstats.durability/100)*diceResult);
-                            break;
-                    }
-
-                    order[oponent].hp -= (damage+normalDamage);
-                    
-                    console.log("CRITICAL HIT !!! " + order[asalto % 2].name + " obtiene un " + segundaTirada + ", ejerce un daño de " + (damage+normalDamage) + " puntos")
-                }
-                else{
-                    //DAÑO NORMAL
-                    order[oponent].hp -= (normalDamage);
-
-                    console.log(order[asalto % 2].name + " obtiene un " + segundaTirada + ", empuña su arma y ejerce un daño de " + (normalDamage) + " puntos")
+            order[oponent].glasses = false;
+            order[oponent].leftArm = false;
+            order[oponent].rightArm = false;
 
 
-                }
 
-
-            }
-            else{
-                //Éxito pero mala puntería
-                let failDamage = 0;
-                let diceValue = 0;
-
-                switch(segundaTirada){
-                    case 1:
-                        diceValue = throwDice(3, 1);
-                        break;
-
-                    case 2:
-                        diceValue = throwDice(3, 4);
-                        break;
-
-                }
-                failDamage = Math.ceil(order[asalto % 2].powerstats.speed/diceValue);
-                order[asalto % 2].hp -= failDamage;
-
-                console.log("FAIL !! " + order[asalto % 2].name + " obtiene un " + segundaTirada + " y se clava el arma en su pierna izq. Recibe un daño de " + failDamage);
-
-            }
-
+            
 
         }
         else{
-            //FRACASO
-            console.log(order[asalto % 2].name + " obtiene un " + tirada + " y ha fallado")
-        }
+            //Tiradas ----------
+            const tirada = throwDice(100, 1);
+    
+            if(tirada <= order[asalto % 2].powerstats.combat){
+                //Éxito-------------
+                const segundaTirada = throwDice(20, 1);
+                console.log(order[asalto % 2].name + " obtiene un " + tirada + " y ataca con éxito");
+    
+                if(segundaTirada > 2){
+                    //Éxito certero
+    
+                    const normalDamage = Math.ceil((order[asalto % 2].powerstats.power + order[asalto % 2].powerstats.strength)*segundaTirada/100);
 
-        for(let i = 0; i < 2; i++){
-            const character = {
-                "name": order[i].name,
-                "intelligence": order[i].powerstats.intelligence,
-                "strength": order[i].powerstats.strength,
-                "speed": order[i].powerstats.speed,
-                "durability": order[i].powerstats.durability,
-                "power": order[i].powerstats.power,
-                "combat": order[i].powerstats.combat,
-                "hp": order[i].hp
+                    if(segundaTirada >= 18){
+                        //DAÑO CRITICO
+                        
+                        let damage = 0;
+                        let diceResult = -1;
+                        switch(segundaTirada){
+                            case 18:
+                            case 19:
+                                diceResult = throwDice(3, (segundaTirada-17))
+                                damage = Math.ceil((order[asalto % 2].powerstats.intelligence*order[asalto % 2].powerstats.durability/100)*diceResult);
+                                break;
+                            case 20:
+                                diceResult = throwDice(3, 5)
+                                damage = Math.ceil((order[asalto % 2].powerstats.intelligence*order[asalto % 2].powerstats.durability/100)*diceResult);
+                                break;
+                        }
+    
+                        order[oponent].hp -= (damage+normalDamage);
+                        
+                        console.log("CRITICAL HIT !!! " + order[asalto % 2].name + " obtiene un " + segundaTirada + ", ejerce un daño de " + (damage+normalDamage) + " puntos")
+                    }
+                    else{
+                        //DAÑO NORMAL
+                        order[oponent].hp -= (normalDamage);
+    
+                        console.log(order[asalto % 2].name + " obtiene un " + segundaTirada + ", empuña su arma y ejerce un daño de " + (normalDamage) + " puntos")
+    
+    
+                    }
+    
+    
+                }
+                else{
+                    //Éxito pero mala puntería
+                    let failDamage = 0;
+                    let diceValue = 0;
+    
+                    switch(segundaTirada){
+                        case 1:
+                            diceValue = throwDice(3, 1);
+                            break;
+    
+                        case 2:
+                            diceValue = throwDice(3, 4);
+                            break;
+    
+                    }
+                    failDamage = Math.ceil(order[asalto % 2].powerstats.speed/diceValue);
+                    order[asalto % 2].hp -= failDamage;
+    
+                    console.log("FAIL !! " + order[asalto % 2].name + " obtiene un " + segundaTirada + " y se clava el arma en su pierna izq. Recibe un daño de " + failDamage);
+    
+                }
+    
+    
             }
-            console.log(character)
-
+            else{
+                //FRACASO
+                console.log(order[asalto % 2].name + " obtiene un " + tirada + " y ha fallado")
+            }
+    
+            for(let i = 0; i < 2; i++){
+                const character = {
+                    "name": order[i].name,
+                    "intelligence": order[i].powerstats.intelligence,
+                    "strength": order[i].powerstats.strength,
+                    "speed": order[i].powerstats.speed,
+                    "durability": order[i].powerstats.durability,
+                    "power": order[i].powerstats.power,
+                    "combat": order[i].powerstats.combat,
+                    "hp": order[i].hp
+                }
+                console.log(character)
+    
+            }
         }
+        
         
 
 
@@ -139,6 +169,17 @@ async function game(data){
     }
 
 
+}
+
+function generateErudito(){
+    const data = {
+        "name": "El Erudito XG.",
+        "ang": 0,
+        "hpw": 1,
+        "hpg": -1,
+        "glasses": false
+    }
+    return data;
 }
 
 
