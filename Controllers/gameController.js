@@ -68,8 +68,11 @@ async function game(data){
                             order[asalto % 2].leftArm=true;
                             order[asalto % 2].powerstats.strength=order[asalto % 2].powerstats.strength/2;
                             const damage = throwDice(20, 1);
-                            console.log("Recibe un daño de" + damage + " puntos")
+                            console.log("Recibe un daño de " + damage + " puntos")
                             order[asalto % 2].hp -= damage;
+                        }
+                        else{
+                            console.log("Pifia. " + order[asalto % 2].name + " se lesiona el brazo izquierdo, pero como ya lo tenía lesionado, no empeora.")
                         }
                         break;
 
@@ -81,8 +84,11 @@ async function game(data){
                             order[asalto % 2].rightArm=true;
                             order[asalto % 2].powerstats.strength=order[asalto % 2].powerstats.strength/2;
                             const damage = throwDice(20, 1);
-                            console.log("Recibe un daño de" + damage + " puntos")
+                            console.log("Recibe un daño de " + damage + " puntos")
                             order[asalto % 2].hp -= damage;
+                        }
+                        else{
+                            console.log("Pifia. " + order[asalto % 2].name + " se lesiona el brazo derecho, pero como ya lo tenía lesionado, no empeora.")
                         }
                         break;
 
@@ -118,7 +124,7 @@ async function game(data){
                         erudito.glasses = true;
                         const damage17 = throwDice(10, 1);
                         erudito.hpw -= damage17;
-                        console.log("El erudito recibe un daño de" + damage17 + " puntos")
+                        console.log("El erudito recibe un daño de " + damage17 + " puntos")
 
                         break;
 
