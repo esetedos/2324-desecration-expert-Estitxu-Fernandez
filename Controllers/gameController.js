@@ -36,23 +36,81 @@ async function game(data){
         
         if(asalto === eruditoTime){
             //el turno ha sido robado por el erudito
-            console.log("El Erudito ha aparecido. El turno es suspendido.")
-            eruditoTime = asalto + Math.random() * (6 - 3) + 3; //para el proximo turno del erudito
-
-            erudito.ang = throwDice(20, 1);
-            erudito.hpw = 1 + erudito.hpw;
+            console.log("El Erudito ha aparecido. El turno es suspendido. " + order[asalto % 2].name + " ha tomado las gafas y se las ha puesto.")
 
             order[asalto % 2].glasses = true;
+            order[oponent].glasses = false;
+            erudito.glasses = false;
+
             order[asalto % 2].leftArm = false;
             order[asalto % 2].rightArm = false;
 
-            order[oponent].glasses = false;
             order[oponent].leftArm = false;
             order[oponent].rightArm = false;
 
+            while((!erudito.glasses) && erudito.hpw > 0){
+                erudito.ang = throwDice(20, 1);
+                erudito.hpw = 1 + erudito.ang;
+    
 
+                switch(erudito.ang){
+                    case (1<=erudito.ang<=3):
+                        if(!order[asalto % 2].leftArm){
+                            console.log("Pifia. " + order[asalto % 2].name + " se lesiona el brazo izquierdo, quedando su atributo dañado")
+                            order[asalto % 2].leftArm=true;
+                            order[asalto % 2].powerstats.strength=order[asalto % 2].powerstats.strength/2;
+                            const damage = throwDice(20, 1);
+                            order[asalto % 2].hp -= damage;
+                        }
+                        break;
 
-            
+                    case (4<=erudito.ang<=6):
+                        if(!order[asalto % 2].rightArm){
+                            console.log("Pifia. " + order[asalto % 2].name + " se lesiona el brazo derecho, quedando su atributo dañado")
+                            order[asalto % 2].rightArm=true;
+                            order[asalto % 2].powerstats.strength=order[asalto % 2].powerstats.strength/2;
+                            const damage = throwDice(20, 1);
+                            order[asalto % 2].hp -= damage;
+                        }
+                        break;
+
+                    case (7<=erudito.ang<=9):
+                        console.log("Caos. " + order[asalto % 2].name + " pierde la memoria y no ataca")
+                        break;
+
+                    case (10<=erudito.ang<=13):
+                        console.log('Aullido. El Erudito grita "tú eres tonto" y ' + order[asalto % 2].name + " descubre dónde se encuentra, momento en el que aprovecha patra atacarle")
+                        const damage10 = throwDice(10, 1);
+                        erudito.hpw -= damage10;
+                        console.log(order[asalto % 2].name + " le causa " + damage10 + " de daño al erudito")
+                        break;
+
+                    case (14<=erudito.ang<=16):
+                        console.log("Granuja. " + order[asalto % 2].name + " aprovecha un despiste del enemigo para colocarle las gafas")
+                        order[asalto % 2].glasses = false;
+                        order[oponent].glasses = true;
+                        break;
+
+                    case (17<=erudito.ang<=18):
+                        console.log('Perspicaz. El erudito detecta al atacante y lo atrae con su famoso grito "tú eres tonto" momento que aprovecha para recuperar sus gafas. Sin embargo, la furia caótica del atacante se desata y El Erudito resulta herido.')
+                        order[asalto % 2].glasses = false;
+                        order[oponent].glasses = false;
+                        erudito.glasses = true;
+                        const damage17 = throwDice(10, 1);
+                        erudito.hpw -= damage17;
+                        break;
+
+                    case (19<=erudito.ang<=21):
+                        console.log("Endemoniado. El atacatnte desata todo el caos de El Erudito, persiguiéndole y cortándole la cabeza.")
+                        erudito.hpw = 0;
+                        break;
+                }
+                asalto++;
+
+    
+            }
+            eruditoTime = asalto + Math.random() * (6 - 3) + 3; //para el proximo turno del erudito
+
 
         }
         else{
@@ -144,6 +202,8 @@ async function game(data){
                 console.log(character)
     
             }
+            asalto++;
+
         }
         
         
@@ -153,7 +213,6 @@ async function game(data){
 
 
 
-        asalto++;
     
     }
 
