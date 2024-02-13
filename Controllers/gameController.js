@@ -170,7 +170,11 @@ async function game(data){
                     "durability": order[i].powerstats.durability,
                     "power": order[i].powerstats.power,
                     "combat": order[i].powerstats.combat,
-                    "hp": order[i].hp
+                    "hp": order[i].hp,
+                    "damageOnLeftArm": order[i].leftArm,
+                    "damageOnRightArm": order[i].rightArm,
+                    "glasses": order[i].glasses
+
                 }
                 console.log(character)
     
