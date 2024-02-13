@@ -151,10 +151,16 @@ async function game(data){
     
             }
             if(erudito.glasses){
+                console.log("------------------------------")            
                 console.log("El erudito ha recuperado sus gafas, por lo que desaparece hasta nuevo aviso.")
+                console.log("------------------------------")            
+
             }
             else if(erudito.hpw <= 0){
+                console.log("------------------------------")            
                 console.log("El erudito ha fallecido y es desterrado a los infiernos del caos para siempre")
+                console.log("------------------------------")            
+
             }
 
             eruditoTime = asalto + Math.round(Math.random() * (6 - 3) + 3); //para el proximo turno del erudito
