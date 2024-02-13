@@ -22,6 +22,11 @@ async function game(data){
     let eruditoTime = Math.round(Math.random() * (6 - 3) + 3-1);
     console.log(eruditoTime)
 
+    order[0].leftArm = false;
+    order[0].rightArm = false;
+
+    order[1].leftArm = false;
+    order[1].rightArm = false;
 
     //turnos *******************************************
     while(order[0].hp > 0 && order[1].hp > 0){
@@ -44,11 +49,7 @@ async function game(data){
             order[oponent].glasses = false;
             erudito.glasses = false;
 
-            order[asalto % 2].leftArm = false;
-            order[asalto % 2].rightArm = false;
 
-            order[oponent].leftArm = false;
-            order[oponent].rightArm = false;
 
             erudito.ang = throwDice(20, 1);
             erudito.hpw = 1 + erudito.ang;
@@ -156,7 +157,8 @@ async function game(data){
                 console.log("------------------------------")            
                 console.log("El erudito ha fallecido y es desterrado a los infiernos del caos para siempre")
                 console.log("------------------------------")            
-
+                order[asalto % 2].glasses = false;
+                order[oponent].glasses = false;
             }
 
             eruditoTime = asalto + Math.round(Math.random() * (6 - 3) + 3); //para el proximo turno del erudito
